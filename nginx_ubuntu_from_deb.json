@@ -1,0 +1,87 @@
+{
+  "variables": {
+    
+    "nginx_ver": "1.13.11",
+    "pcre_ver": "8.42",
+    "zlib_ver": "1.2.11",
+    "openssl_ver": "1.1.0h",
+    "geoip_ver": "20180403",
+    
+    "working_dir": "/opt",
+    "src_folder": "src_files",
+    "deb_pkg_folder": "deb_pkg",
+    "log_folder": "log",
+    "log_file": "install_deb.log"
+    
+    },
+  "builders": [{
+    "type": "amazon-ebs",
+    "access_key": "{{user `aws_access_key`}}",
+    "secret_key": "{{user `aws_secret_key`}}",
+    "region": "us-west-1",
+    "source_ami_filter": {
+      "filters": {
+        "virtualization-type": "hvm",
+        "name": "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*",
+        "root-device-type": "ebs"
+        },
+      "owners": ["099720109477"],
+      "most_recent": true
+      },
+    "instance_type": "t2.micro",
+    "ssh_username": "ubuntu",
+    "ami_name": "custom_nginx_ubuntu_{{timestamp}}",
+    "vpc_id": "vpc-xxxxxxxx",
+    "subnet_id": "subnet-xxxxxxxx",
+    "associate_public_ip_address": "true"
+    }],
+  "provisioners": [{
+    "type": "shell",
+    "inline": ["sudo mkdir -p {{user `working_dir`}}/{{user `src_folder`}}",
+    "sudo chmod 777 {{user `working_dir`}}/{{user `src_folder`}}",
+    "sudo mkdir -p {{user `working_dir`}}/{{user `deb_pkg_folder`}}/",
+    "sudo chmod 777 {{user `working_dir`}}/{{user `deb_pkg_folder`}}"]
+    },{
+    "type": "file",
+    "source": "./upload/",
+    "destination": "{{user `working_dir`}}/{{user `deb_pkg_folder`}}"
+    },{
+    "type": "file",
+    "source": "./download/{{user `deb_pkg_folder`}}/",
+    "destination": "{{user `working_dir`}}/{{user `src_folder`}}"
+    },{
+    "type": "shell",
+    "inline": ["sudo chmod 755 {{user `working_dir`}}/{{user `src_folder`}}",
+      "sudo chmod 755 {{user `working_dir`}}/{{user `deb_pkg_folder`}}"]
+    },{
+    "type": "shell",
+    "scripts": ["./bash-scripts/00--nginx-prep_install.sh",
+      "./bash-scripts/01b-nginx-install_from_deb.sh",
+      "./bash-scripts/02--nginx-configure_post_install.sh"],
+    "expect_disconnect": true,
+    "environment_vars": [
+      "NGINX_VER={{user `nginx_ver`}}",
+      "PCRE_VER={{user `pcre_ver`}}",
+      "ZLIB_VER={{user `zlib_ver`}}",
+      "OPENSSL_VER={{user `openssl_ver`}}",
+      "GEOIP_VER={{user `geoip_ver`}}",
+      "WORKING_DIR={{user `working_dir`}}",
+      "SRC_FOLDER={{user `src_folder`}}",
+      "DEB_PKG_FOLDER={{user `deb_pkg_folder`}}",
+      "LOG_FOLDER={{user `log_folder`}}",
+      "LOG_FILE={{user `log_file`}}"]
+    },{
+    "type": "shell",
+    "script": "./bash-scripts/03--nginx-verify_install.sh",
+    "pause_before": "10s",
+    "environment_vars": [
+      "WORKING_DIR={{user `working_dir`}}",
+      "LOG_FOLDER={{user `log_folder`}}",
+      "LOG_FILE={{user `log_file`}}"]
+    },{
+    "type": "file",
+    "source": "{{user `working_dir`}}/{{user `log_folder`}}/",
+    "destination": "./download",
+    "direction": "download"
+  }]
+}
