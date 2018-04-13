@@ -38,17 +38,13 @@
   "provisioners": [{
     "type": "shell",
     "inline": ["sudo mkdir -p {{user `working_dir`}}/{{user `src_folder`}}",
-    "sudo chmod 777 {{user `working_dir`}}/{{user `src_folder`}}",
+    "sudo chown ubuntu:ubuntu {{user `working_dir`}}/{{user `src_folder`}}",
     "sudo mkdir -p {{user `working_dir`}}/{{user `deb_pkg_folder`}}/",
-    "sudo chmod 777 {{user `working_dir`}}/{{user `deb_pkg_folder`}}"]
+    "sudo chown ubuntu:ubuntu {{user `working_dir`}}/{{user `deb_pkg_folder`}}"]
     },{
     "type": "file",
     "source": "./upload/",
     "destination": "{{user `working_dir`}}/{{user `deb_pkg_folder`}}"
-    },{
-    "type": "shell",
-    "inline": ["sudo chmod 755 {{user `working_dir`}}/{{user `src_folder`}}",
-      "sudo chmod 755 {{user `working_dir`}}/{{user `deb_pkg_folder`}}"]
     },{
     "type": "shell",
     "scripts": ["./bash-scripts/00--nginx-prep_install.sh",
