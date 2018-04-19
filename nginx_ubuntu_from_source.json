@@ -1,6 +1,5 @@
 {
   "variables": {
-    
     "nginx_ver": "1.13.11",
     "pcre_ver": "8.42",
     "zlib_ver": "1.2.11",
@@ -12,7 +11,6 @@
     "deb_pkg_folder": "deb_pkg",
     "log_folder": "log",
     "log_file": "install_source.log"
-    
     },
   "builders": [{
     "type": "amazon-ebs",
