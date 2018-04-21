@@ -1,2 +1,3 @@
-
 .DS_Store
+!download/deb_pkg/.gitkeep
+!download/log/.gitkeep
