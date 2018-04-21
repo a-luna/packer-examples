@@ -1,5 +1,0 @@
-<pre class="command-line" data-prompt="$" data-output="2-"><code class="language-bash"></code></pre>
-
-<pre class="line-numbers show-language copy-to-clipboard code-toolbar"><code class="language-json"></code></pre>
-
-<p></p>
