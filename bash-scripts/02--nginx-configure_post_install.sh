@@ -16,21 +16,23 @@
 #   - Reboots the server to verify NGINX starts automatically when
 #     reboot occurs, verified in next script 03-verify_nginx.sh
 ##########################################################################
-# Constant strings DO NOT EDIT THESE VALUES
+# String values DO NOT EDIT THESE VALUES
 #
+
 GEOIP1_PRE=GeoLite2-City
 GEOIP2_PRE=GeoLite2-Country
 EXT=.tar.gz
 EXT_DB=.mmdb
+
 ##########################################################################
 ##########################################################################
 # Computed Environment Variables DO NOT EDIT THESE VALUES
 #
+
 SRC_FOLDER_PATH=${WORKING_DIR}/${SRC_FOLDER}
 DEB_PKG_FOLDER_PATH=${WORKING_DIR}/${DEB_PKG_FOLDER}
 INSTALL_LOG_FOLDER_PATH=${WORKING_DIR}/${LOG_FOLDER}
 INSTALL_LOG_FILE_PATH=${INSTALL_LOG_FOLDER_PATH}/${LOG_FILE}
-
 
 GEOIP1_DB_TAR=${GEOIP1_PRE}${EXT}
 GEOIP2_DB_TAR=${GEOIP2_PRE}${EXT}
