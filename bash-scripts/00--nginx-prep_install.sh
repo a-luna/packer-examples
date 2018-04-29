@@ -34,7 +34,7 @@ sudo apt autoremove -y >> ${INSTALL_LOG_FILE_PATH} 2>&1
 echo "$(date +"%d-%b-%Y-%H-%M-%S") | Downloading prerequisites..." |& tee -a ${INSTALL_LOG_FILE_PATH}
 
 # Install build tools (gcc, g++, etc)
-sudo apt install build-essential -y >> ${INSTALL_LOG_FILE_PATH} 2>&
+sudo apt install build-essential -y >> ${INSTALL_LOG_FILE_PATH} 2>&1
 
 # Install libraries required by GeoIP2 module to read MaxMind database files
 sudo apt install libmaxminddb0 libmaxminddb-dev mmdb-bin -y >> ${INSTALL_LOG_FILE_PATH} 2>&1
