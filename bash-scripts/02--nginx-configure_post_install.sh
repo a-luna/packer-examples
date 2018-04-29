@@ -89,6 +89,11 @@ echo "$(date +"%d-%b-%Y-%H-%M-%S") | Configuring systemd unit file..." |& tee -a
 # stopped and reloaded with global commands
 sudo mv /${DEB_PKG_FOLDER_PATH}/nginx.service /etc/systemd/system/nginx.service
 
+echo "$(date +"%d-%b-%Y-%H-%M-%S") | Setting permissions for NGINX user account..." |& tee -a ${INSTALL_LOG_FILE_PATH}
+sudo chown www-data:www-data /run/nginx.pid
+sudo chown -R www-data:www-data /var/log/nginx/*
+sudo chown -R www-data:www-data /etc/nginx/*
+
 echo "$(date +"%d-%b-%Y-%H-%M-%S") | Installation and configuration is complete, removing source files..." |& tee -a ${INSTALL_LOG_FILE_PATH}
 # Remove all source files
 sudo rm -rf $SRC_FOLDER_PATH
