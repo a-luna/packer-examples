@@ -1,11 +1,10 @@
 #!/bin/bash -e
-# 03-verify_nginx.sh
+# 03--verify_nginx.sh
 #
 # This script verifies that the nginx service is running
 # and the UFW app profile settings were copied correctly.
 
 # These variable values are set in the packer template
-
 INSTALL_LOG_PATH=${WORKING_DIR}/${LOG_FOLDER}/${LOG_FILE}
 
 echo -e "\n$(date +"%d-%b-%Y-%H-%M-%S") | Reboot completed, NGINX service should be running:\n" |& tee -a ${INSTALL_LOG_PATH} 
