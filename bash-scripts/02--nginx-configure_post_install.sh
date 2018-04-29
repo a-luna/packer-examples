@@ -65,7 +65,7 @@ echo -e "\n$(date +"%d-%b-%Y-%H-%M-%S") | Verify configuration file syntax is co
           sudo mkdir sites-available >> ${INSTALL_LOG_FILE_PATH} 2>&1
           sudo mkdir sites-enabled >> ${INSTALL_LOG_FILE_PATH} 2>&1
           
-echo -e "\n$(date +"%d-%b-%Y-%H-%M-%S") | Downloading GeoIP2 database files..." |& tee -a ${INSTALL_LOG_FILE_PATH} && \
+echo -e "$(date +"%d-%b-%Y-%H-%M-%S") | Downloading GeoIP2 database files..." |& tee -a ${INSTALL_LOG_FILE_PATH} && \
 # Create directory for GeoIP2 databases
 sudo mkdir -p /etc/nginx/geoip2 >> ${INSTALL_LOG_FILE_PATH} 2>&1
 
@@ -98,7 +98,7 @@ echo "$(date +"%d-%b-%Y-%H-%M-%S") | Installation and configuration is complete,
 # Remove all source files
 sudo rm -rf $SRC_FOLDER_PATH
 
-echo -e "\n$(date +"%d-%b-%Y-%H-%M-%S") | Starting NGINX, verify service is active:\n" |& tee -a ${INSTALL_LOG_FILE_PATH} && \
+echo -e "$(date +"%d-%b-%Y-%H-%M-%S") | Starting NGINX, verify service is active:\n" |& tee -a ${INSTALL_LOG_FILE_PATH} && \
   # Start and enable NGINX service
   sudo systemctl start nginx.service >> ${INSTALL_LOG_FILE_PATH} 2>&1 && \
     sudo systemctl enable nginx.service >> ${INSTALL_LOG_FILE_PATH} 2>&1 && \
