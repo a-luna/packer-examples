@@ -26,14 +26,16 @@
 # https://wiki.debian.org/CheckInstall
 #
 # After NGINX is built, all of the source code is added to a .tar.gz
-# archive file and stored in the $DEB_PKG_FOLDER_PATH along with the .deb
-# package file. Finally, the script creates the systemd unit file and 
-# UFW app profile settings file and copies them to their correct
-# locations. Finally, the nginx service is enabled and the server is
-# rebooted to verify that nginx automatically starts.
-##########################################################################
-# Constant strings DO NOT EDIT THESE VALUES
+# archive file and stored in the $DEB_PKG_FOLDER_PATH along with the
+# .deb package file. Finally, the script copies the systemd unit file
+# the UFW app profile settings file to their correct locations. 
 #
+# Finally, the nginx service is enabled and the server is rebooted to 
+# verify that nginx automatically starts.
+##########################################################################
+# String values DO NOT EDIT
+#
+
 EXT_TAR=.tar.gz
 EXT_DB=.mmdb
 
@@ -43,8 +45,9 @@ ZLIB_PRE=zlib-
 OPENSSL_PRE=openssl-
 GEOIP1_PRE=GeoLite2-City
 GEOIP2_PRE=GeoLite2-Country
+
 ##########################################################################
-# Computed Environment Variables DO NOT EDIT THESE VALUES
+# Environment Variables DO NOT EDIT THESE VALUES
 #
 # Variables which are not defined in this script are passed in from
 # the packer template.
@@ -74,6 +77,7 @@ GEOIP2_DB_FILE=${GEOIP2_PRE}${EXT_DB}
 
 ALL_SRC_FILES_TAR=${NGINX_PRE}${NGINX_VER}-${SRC_FOLDER}${EXT_TAR}
 DEB_PKG_FILE=nginx_${NGINX_VER}-1_amd64.deb
+
 ##########################################################################
 # BEGIN SCRIPT EXECUTION
 #
@@ -97,10 +101,12 @@ DEB_PKG_FILE=nginx_${NGINX_VER}-1_amd64.deb
 ##########################################################################
 
 echo "$(date +"%d-%b-%Y-%H-%M-%S") | Downloading source files..." |& tee -a ${INSTALL_LOG_FILE_PATH}
+
 # Download and extract the source code for the latest version of NGINX
 cd $SRC_FOLDER_PATH
 sudo wget http://nginx.org/download/$NGINX_SRC_TAR >> ${INSTALL_LOG_FILE_PATH} 2>&1 && \
   sudo tar xzf $NGINX_SRC_TAR >> ${INSTALL_LOG_FILE_PATH} 2>&1
+  
 # Download and extract the latest versions of PCRE, zlib and OpenSSL libraries
 sudo wget https://downloads.sourceforge.net/project/pcre/pcre/${PCRE_VER}/${PCRE_SRC_TAR} >> ${INSTALL_LOG_FILE_PATH} 2>&1 && \
   sudo tar xzf $PCRE_SRC_TAR >> ${INSTALL_LOG_FILE_PATH} 2>&1
@@ -108,16 +114,19 @@ sudo wget http://zlib.net/${ZLIB_SRC_TAR} >> ${INSTALL_LOG_FILE_PATH} 2>&1 && \
   sudo tar xzf $ZLIB_SRC_TAR >> ${INSTALL_LOG_FILE_PATH} 2>&1
 sudo wget https://www.openssl.org/source/${OPENSSL_SRC_TAR} >> ${INSTALL_LOG_FILE_PATH} 2>&1 && \
   sudo tar xzf $OPENSSL_SRC_TAR >> ${INSTALL_LOG_FILE_PATH} 2>&1
+  
 # Download (third party) NGINX modules: cache purge and GeoIP2
 # The GeoIP module included with NGINX only works with v1 MaxMind database files
 # V2 database files are far superior, see here for more info:
 # https://dev.maxmind.com/geoip/geoip2/whats-new-in-geoip2/
 sudo git clone --recursive https://github.com/FRiCKLE/ngx_cache_purge.git >> ${INSTALL_LOG_FILE_PATH} 2>&1
 sudo git clone --recursive https://github.com/leev/ngx_http_geoip2_module.git >> ${INSTALL_LOG_FILE_PATH} 2>&1
+
 # Remove archive files
 sudo rm -rf *.tar.gz >> ${INSTALL_LOG_FILE_PATH} 2>&1
 
 echo "$(date +"%d-%b-%Y-%H-%M-%S") | Building NGINX from source..." |& tee -a ${INSTALL_LOG_FILE_PATH}
+
 # Configure the build options for NGINX
 cd $NGINX_SRC_FOLDER_PATH
 sudo ./configure \
@@ -174,16 +183,20 @@ sudo ./configure \
   --add-module=../ngx_cache_purge \
   --with-cc-opt='-g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2' \
   --with-ld-opt='-Wl,-z,relro -Wl,--as-needed' >> ${INSTALL_LOG_FILE_PATH} 2>&1
+  
 # Build nginx with the specified configuration
 sudo make >> ${INSTALL_LOG_FILE_PATH} 2>&1
+
 # Create a .deb package (instead of running `sudo make install`)
 sudo checkinstall --install=no -y >> ${INSTALL_LOG_FILE_PATH} 2>&1 
 
 echo -e "\n$(date +"%d-%b-%Y-%H-%M-%S") | Installing NGINX from .deb package...\n" |& tee -a ${INSTALL_LOG_FILE_PATH}
+
 # Install the .deb package, this allows uninstall via apt-get
 sudo dpkg -i ${DEB_PKG_FILE} |& tee -a ${INSTALL_LOG_FILE_PATH}
 
 echo "$(date +"%d-%b-%Y-%H-%M-%S") | Install completed successfully, creating archive of source files..." |& tee -a ${INSTALL_LOG_FILE_PATH}
+
 # Move the .deb package to a new folder since we are going to create an
 # archive from the directory containing the downloaded source code files,
 # which is our current working directory
@@ -197,4 +210,3 @@ sudo mv $ALL_SRC_FILES_TAR $DEB_PKG_FOLDER_PATH >> ${INSTALL_LOG_FILE_PATH} 2>&1
 
 # Make both .deb package and source files archive executable by all users
 sudo chmod 755 ${DEB_PKG_FOLDER_PATH}/nginx*.* >> ${INSTALL_LOG_FILE_PATH} 2>&1
-
