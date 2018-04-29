@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# 00-prepare_install.sh
+# 00--prepare_install.sh
 # Author: Aaron Luna
 # Website: alunablog.com
 #
@@ -12,8 +12,10 @@
 ##########################################################################
 # Computed Environment Variables DO NOT EDIT THESE VALUES
 #
+
 INSTALL_LOG_FOLDER_PATH=${WORKING_DIR}/${LOG_FOLDER}
 INSTALL_LOG_FILE_PATH=${INSTALL_LOG_FOLDER_PATH}/${LOG_FILE}
+
 ##########################################################################
 
 sudo mkdir -p $INSTALL_LOG_FOLDER_PATH
