@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# 02-configure_nginx_post_install.sh
+# 02--configure_nginx_post_install.sh
 #
 # This script performs various actions that are necessary
 # in order for NGINX to run after installation. These tasks
