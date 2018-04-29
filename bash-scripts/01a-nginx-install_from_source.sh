@@ -108,7 +108,7 @@ sudo wget http://nginx.org/download/$NGINX_SRC_TAR >> ${INSTALL_LOG_FILE_PATH} 2
   sudo tar xzf $NGINX_SRC_TAR >> ${INSTALL_LOG_FILE_PATH} 2>&1
   
 # Download and extract the latest versions of PCRE, zlib and OpenSSL libraries
-sudo wget https://downloads.sourceforge.net/project/pcre/pcre/${PCRE_VER}/${PCRE_SRC_TAR} >> ${INSTALL_LOG_FILE_PATH} 2>&1 && \
+sudo wget https://ftp.pcre.org/pub/pcre/${PCRE_VER}/${PCRE_SRC_TAR} >> ${INSTALL_LOG_FILE_PATH} 2>&1 && \
   sudo tar xzf $PCRE_SRC_TAR >> ${INSTALL_LOG_FILE_PATH} 2>&1
 sudo wget http://zlib.net/${ZLIB_SRC_TAR} >> ${INSTALL_LOG_FILE_PATH} 2>&1 && \
   sudo tar xzf $ZLIB_SRC_TAR >> ${INSTALL_LOG_FILE_PATH} 2>&1
