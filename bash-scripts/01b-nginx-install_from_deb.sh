@@ -32,12 +32,10 @@ DEB_PKG_FILE=nginx_${NGINX_VER}-1_amd64.deb
 sudo mkdir -p /var/log/nginx
 
 echo "$(date +"%d-%b-%Y-%H-%M-%S") | Extracting source files from archive..." |& tee -a ${INSTALL_LOG_FILE_PATH}
-
 cd $SRC_FOLDER_PATH
 sudo tar xzf $ALL_SRC_FILES_TAR >> ${INSTALL_LOG_FILE_PATH} 2>&1
 
 echo -e "\n$(date +"%d-%b-%Y-%H-%M-%S") | Installing NGINX from .deb package...\n" |& tee -a ${INSTALL_LOG_FILE_PATH}
-
 cd ${NGINX_PRE}${NGINX_VER}
 sudo mv $SRC_FOLDER_PATH/$DEB_PKG_FILE . >> ${INSTALL_LOG_FILE_PATH} 2>&1
 sudo dpkg -i ${DEB_PKG_FILE} |& tee -a ${INSTALL_LOG_FILE_PATH}
