@@ -1,6 +1,8 @@
 # Packer Example: Ubuntu 16.04 with Custom NGINX, Built from Source
 This repo contains two packer template files which install the latest mainline NGINX from source on the most recent, official Ubuntu 16.04 AMI from Canonical. Provisioning is accomplished with bash scripts, and the NGINX configuration options can be modified to produce a custom install with any combination of builtin or third-party modules enabled.
 
+[Click here for a complete guide to using these packer templetes.](https://alunablog.com/2018/03/30/packer-template-aws-ec2-ubuntu-nginx/)
+
 ## Requirements
 You only need to have Packer installed on your system to use these examples. Please follow the simple instructions at the link below:
 
@@ -11,4 +13,45 @@ After installing Packer, clone this repo to your local system using the command 
 
 `git clone https://github.com/a-luna/packer-examples.git`
 
-Make sure Packer is installed and navigate to the `packer-examples` directory in the terminal. 
+First, decide how you are going to provide your AWS authentication credentials to packer. [Read this page](https://www.packer.io/docs/builders/amazon.html#authentication) for more info. I recommend creating a credentials file, the default location Packer checks for this file is **$HOME/.aws/credentials** on Linux and OS X, or **%USERPROFILE%.aws\credentials** for Windows users. To accociate your access keys with the default profile, include the lines below in your `credentials` file:
+
+```
+[default]
+aws_access_key_id = YOUR ACCESS KEY
+aws_secret_access_key = YOUR SECRET KEY
+
+[default]
+region = us-west-1
+```
+
+The SDK checks the AWS_PROFILE environment variable to determine which profile to use. If no AWS_PROFILE variable is set, the SDK uses the default profile.
+
+You can optionally specify a different location for Packer to look for the credentials file by setting the environment with the `AWS_SHARED_CREDENTIALS_FILE` variable. See [Amazon's documentation on specifying profiles](https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-profiles) for more details.
+
+Make sure Packer is installed and navigate to the `packer-examples` directory in the terminal. You need to edit a few values in the packer template before you can build an AMI:
+
+```JSON
+"builders": [{
+    "type": "amazon-ebs",
+    "access_key": "{{user `aws_access_key`}}",
+    "secret_key": "{{user `aws_secret_key`}}",
+    "region": "us-west-1",
+    "source_ami_filter": {
+        "filters": {
+            "virtualization-type": "hvm",
+            "name": "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*",
+            "root-device-type": "ebs"
+            },
+        "owners": ["099720109477"],
+        "most_recent": true
+        },
+    "instance_type": "t2.micro",
+    "ssh_username": "ubuntu",
+    "ami_name": "custom_nginx_ubuntu_{{timestamp}}",
+    "vpc_id": "vpc-xxxxxxxx",
+    "subnet_id": "subnet-xxxxxxxx",
+    "associate_public_ip_address": "true"
+  }],
+```
+
+If you have not defined a default VPC or you would like to use a VPC other than your default, you must provide these values. You can remove these if you wish to use your account's default VPC. If using a non-default VPC, public IP addresses are not provided by default. If this is toggled, your new instance will get a Public IP.
