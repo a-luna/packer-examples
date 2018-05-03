@@ -4,7 +4,7 @@
     "pcre_ver": "8.42",
     "zlib_ver": "1.2.11",
     "openssl_ver": "1.1.0h",
-    "geoip_ver": "20180403",
+    "geoip_ver": "20180501",
     
     "working_dir": "/opt",
     "src_folder": "src_files",
