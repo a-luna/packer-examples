@@ -1,0 +1,96 @@
+{
+  "variables": {
+    "nginx_ver": "1.13.12",
+    "pcre_ver": "8.42",
+    "zlib_ver": "1.2.11",
+    "openssl_ver": "1.1.0h",
+    "geoip_ver": "20180501",
+    
+    "mysql_root_temp_password": "w0rdPress5q!temp1",
+    "wp_db_host": "localhost",
+    "wp_db_name": "wordpress",
+    "wp_db_user_name": "db_user",
+    "wp_db_user_temp_password": "w0rdPress5q!temp2",
+    
+    "wp_host": "wp.bedrock",
+    "wp_root_dir": "/sites",
+    
+    "working_dir": "/opt",
+    "archive_folder": "archives",
+    "deb_pkg_folder": "deb_pkg",
+    "log_folder": "log",
+    "service_config_folder": "service_config",
+    "site_config_folder": "site_config",
+    "site_files_folder": "site_files",
+    "src_folder": "src_files",
+    "log_file": "install_source.log"
+    },
+  "provisioners": [{
+    "type": "shell",
+    "inline": ["sudo mkdir -p {{user `working_dir`}}",
+    "sudo chown ubuntu:ubuntu {{user `working_dir`}}"]
+    },{
+    "type": "file",
+    "source": "./upload/",
+    "destination": "{{user `working_dir`}}"
+    },{
+    "type": "shell",
+    "scripts": ["./bash-scripts/1-install_nginx.sh",
+      "./bash-scripts/2-configure_nginx.sh",
+      "./bash-scripts/3-install_mysql.sh",
+      "./bash-scripts/4-install_php_wordpress.sh",
+      "./bash-scripts/5-verify_install.sh"],
+    "expect_disconnect": true,
+    "environment_vars": [
+      "NGINX_VER={{user `nginx_ver`}}",
+      "PCRE_VER={{user `pcre_ver`}}",
+      "ZLIB_VER={{user `zlib_ver`}}",
+      "OPENSSL_VER={{user `openssl_ver`}}",
+      "GEOIP_VER={{user `geoip_ver`}}",
+      
+      "MYSQL_ROOT_TEMP_PASSWORD={{user `mysql_root_temp_password`}}",
+      "WP_DB_HOST={{user `wp_db_host`}}",
+      "WP_DB_NAME={{user `wp_db_name`}}",
+      "WP_DB_USER_NAME={{user `wp_db_user_name`}}",
+      "WP_DB_USER_TEMP_PASSWORD={{user `wp_db_user_temp_password`}}",
+      
+      "WP_HOST={{user `wp_host`}}",
+      "WP_ROOT_DIR={{user `wp_root_dir`}}",
+      
+      "WORKING_DIR={{user `working_dir`}}",
+      "SRC_FOLDER={{user `src_folder`}}",
+      "DEB_PKG_FOLDER={{user `deb_pkg_folder`}}",
+      "LOG_FOLDER={{user `log_folder`}}",
+      "ARCHIVE_FOLDER={{user `archive_folder`}}",
+      "SERVICE_CONFIG_FOLDER={{user `service_config_folder`}}",
+      "SITE_CONFIG_FOLDER={{user `site_config_folder`}}",
+      "SITE_FILES_FOLDER={{user `site_files_folder`}}",
+      "LOG_FILE={{user `log_file`}}"]
+    },{
+    "type": "shell",
+    "script": "./bash-scripts/6-verify_install_reboot.sh",
+    "pause_before": "10s",
+    "environment_vars": [
+      "WORKING_DIR={{user `working_dir`}}",
+      "LOG_FOLDER={{user `log_folder`}}",
+      "LOG_FILE={{user `log_file`}}"]
+    }],
+  "builders": [{
+    "type": "amazon-ebs",
+    "access_key": "{{user `aws_access_key`}}",
+    "secret_key": "{{user `aws_secret_key`}}",
+    "region": "us-west-2",
+    "source_ami_filter": {
+      "filters": {
+        "virtualization-type": "hvm",
+        "name": "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*",
+        "root-device-type": "ebs"
+        },
+      "owners": ["099720109477"],
+      "most_recent": true
+      },
+    "instance_type": "t2.micro",
+    "ssh_username": "ubuntu",
+    "ami_name": "wordpress_bedrock_{{timestamp}}"
+    }]
+}

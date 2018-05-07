@@ -59,3 +59,9 @@ $ sudo systemctl status nginx.service
   Apr 29 07:55:18 ip-172-31-12-194 systemd[1]: Starting A high performance web server and a reverse proxy server...
   Apr 29 07:55:18 ip-172-31-12-194 systemd[1]: Started A high performance web server and a reverse proxy server.
 ```
+
+## License
+MIT License
+
+## Author Information
+Created in 2018 by [Aaron Luna](https://alunablog.com)
