@@ -90,8 +90,12 @@ echo "$(date +"%d-%b-%Y-%H-%M-%S") | Configuring systemd unit file..." |& tee -a
 sudo mv /${DEB_PKG_FOLDER_PATH}/nginx.service /etc/systemd/system/nginx.service
 
 echo "$(date +"%d-%b-%Y-%H-%M-%S") | Setting permissions for NGINX user account..." |& tee -a ${INSTALL_LOG_FILE_PATH}
+sudo touch /run/nginx.pid
 sudo chown www-data:www-data /run/nginx.pid
+sudo chmod 755 /run/nginx.pid
+
 sudo chown -R www-data:www-data /var/log/nginx/*
+sudo chown -R www-data:www-data /var/lib/nginx/*
 sudo chown -R www-data:www-data /etc/nginx/*
 
 echo "$(date +"%d-%b-%Y-%H-%M-%S") | Installation and configuration is complete, removing source files..." |& tee -a ${INSTALL_LOG_FILE_PATH}
