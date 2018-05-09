@@ -40,6 +40,7 @@ if [ "$?" -gt "0" ]; then
   exit 1
 fi
 
+echo -e "\n" |& tee -a ${INSTALL_LOG_PATH}
 sudo systemctl status php7.0-fpm.service |& tee -a ${INSTALL_LOG_PATH}
 sudo systemctl status php7.0-fpm.service | grep -q 'Active: active (running)' > /dev/null 2>&1
 if [ "$?" -gt "0" ]; then
@@ -49,4 +50,4 @@ if [ "$?" -gt "0" ]; then
   exit 1
 fi
 
-echo -e "\n$(date +"%d-%b-%Y-%H-%M-%S") | Installation completed sucessfully!\n" |& tee -a ${INSTALL_LOG_PATH}
+echo -e "\n$(date +"%d-%b-%Y-%H-%M-%S") | Service verification complete\n" |& tee -a ${INSTALL_LOG_PATH}

@@ -68,7 +68,8 @@
       "LOG_FILE={{user `log_file`}}"]
     },{
     "type": "shell",
-    "script": "./bash-scripts/6-verify_install_reboot.sh",
+    "scripts": ["./bash-scripts/6-verify_install_reboot.sh",
+      "./bash-scripts//7-verify_web_server.sh"],
     "pause_before": "10s",
     "environment_vars": [
       "WORKING_DIR={{user `working_dir`}}",

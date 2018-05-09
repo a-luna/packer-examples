@@ -71,6 +71,9 @@ sudo mv ${SITE_FILES_FOLDER_PATH}/testfpm.php ${WP_INSTALL_FOLDER}/bedrock/web
 sudo mv ${SITE_FILES_FOLDER_PATH}/testcity.php ${WP_INSTALL_FOLDER}/bedrock/web
 sudo mv ${SITE_FILES_FOLDER_PATH}/testcountry.php ${WP_INSTALL_FOLDER}/bedrock/web
 
+sudo sed -i "s|  require_once '/sites/example.com/bedrock/vendor/autoload.php';|  require_once '${WP_INSTALL_FOLDER}/bedrock/vendor/autoload.php';|" ${WP_INSTALL_FOLDER}/bedrock/web/testcity.php
+sudo sed -i "s|  require_once '/sites/example.com/bedrock/vendor/autoload.php';|  require_once '${WP_INSTALL_FOLDER}/bedrock/vendor/autoload.php';|" ${WP_INSTALL_FOLDER}/bedrock/web/testcountry.php
+
 echo "$(date +"%d-%b-%Y-%H-%M-%S") | Building Maxmind-DB C API..." |& tee -a ${INSTALL_LOG_FILE_PATH}
 cd ${WP_INSTALL_FOLDER}/bedrock/vendor/maxmind-db/reader/ext
 sudo phpize >> ${INSTALL_LOG_FILE_PATH} 2>&1

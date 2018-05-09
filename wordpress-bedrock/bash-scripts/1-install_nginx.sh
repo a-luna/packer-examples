@@ -100,7 +100,7 @@ sudo add-apt-repository ppa:maxmind/ppa -y >> ${INSTALL_LOG_FILE_PATH} 2>&1
 sudo apt update >> ${INSTALL_LOG_FILE_PATH} 2>&1 && sudo DEBIAN_FRONTEND=noninteractive apt upgrade -y >> ${INSTALL_LOG_FILE_PATH} 2>&1
 sudo apt autoremove -y >> ${INSTALL_LOG_FILE_PATH} 2>&1
 
-echo "$(date +"%d-%b-%Y-%H-%M-%S") | Downloading prerequisites..." |& tee -a ${INSTALL_LOG_FILE_PATH}
+echo "$(date +"%d-%b-%Y-%H-%M-%S") | Installing prerequisites..." |& tee -a ${INSTALL_LOG_FILE_PATH}
 
 # Install build tools (gcc, g++, etc)
 sudo apt install build-essential -y >> ${INSTALL_LOG_FILE_PATH} 2>&1
@@ -223,11 +223,16 @@ sudo mv ${DEB_PKG_FILE} ${DEB_PKG_FOLDER_PATH}/${DEB_PKG_FILE} >> ${INSTALL_LOG_
 # compress the files using the .tar.gz format
 cd $SRC_FOLDER_PATH
 sudo tar -zcf ../$ALL_SRC_FILES_TAR . >> ${INSTALL_LOG_FILE_PATH} 2>&1
+echo -e "$(date +"%d-%b-%Y-%H-%M-%S") | Created $ALL_SRC_FILES_TAR" |& tee -a ${INSTALL_LOG_FILE_PATH}
+
 cd ..
 sudo mv $ALL_SRC_FILES_TAR $DEB_PKG_FOLDER_PATH >> ${INSTALL_LOG_FILE_PATH} 2>&1
 
 # Make both .deb package and source files archive executable by all users
 sudo chmod 755 ${DEB_PKG_FOLDER_PATH}/nginx*.* >> ${INSTALL_LOG_FILE_PATH} 2>&1
 
-echo -e "$(date +"%d-%b-%Y-%H-%M-%S") | Created $ALL_SRC_FILES_TAR" |& tee -a ${INSTALL_LOG_FILE_PATH}
+echo "$(date +"%d-%b-%Y-%H-%M-%S") | Removing source files..." |& tee -a ${INSTALL_LOG_FILE_PATH}
+# Remove all source files
+sudo rm -rf $SRC_FOLDER_PATH
+
 echo -e "$(date +"%d-%b-%Y-%H-%M-%S") | Installation complete\n" |& tee -a ${INSTALL_LOG_FILE_PATH}

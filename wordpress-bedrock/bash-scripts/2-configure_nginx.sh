@@ -11,10 +11,7 @@
 #   - Creating folder structure to support virtual host configurations
 #   - Configuring UFW app profiles for HTTP and/or HTTPS traffic
 #   - Configuring systemd unit file so NGINX can be started,
-#     stopped and reloaded with global commands
-#   - Remove all source files used to build/install NGINX
-#   - Start and enable the NGINX service, verify NGINX starts
-#     without error
+#     stopped and reloaded with global commands\
 ##########################################################################
 # Environment Variables 
 #
@@ -37,7 +34,6 @@ GEOIP1_DB_FILE=${GEOIP1_PRE}${EXT_DB}
 GEOIP2_DB_FILE=${GEOIP2_PRE}${EXT_DB}
 
 ARCHIVE_FOLDER_PATH=${WORKING_DIR}/${ARCHIVE_FOLDER}
-SRC_FOLDER_PATH=${WORKING_DIR}/${SRC_FOLDER}
 SERVICE_CONFIG_FOLDER_PATH=${WORKING_DIR}/${SERVICE_CONFIG_FOLDER}
 SITE_CONFIG_FOLDER_PATH=${WORKING_DIR}/${SITE_CONFIG_FOLDER}
 SITE_FILES_FOLDER_PATH=${WORKING_DIR}/${SITE_FILES_FOLDER}
@@ -52,8 +48,6 @@ sudo mv nginx nginx-previous
 sudo git clone --recursive https://github.com/h5bp/server-configs-nginx.git nginx >> ${INSTALL_LOG_FILE_PATH} 2>&1
 sudo mkdir -p /etc/nginx/conf.d
 sudo mkdir -p /etc/nginx/snippets
-sudo mkdir -p /etc/nginx/sites-available
-sudo mkdir -p /etc/nginx/sites-enabled
 
 echo "$(date +"%d-%b-%Y-%H-%M-%S") | Copying NGINX configuration files..." |& tee -a ${INSTALL_LOG_FILE_PATH}
 sudo mv ${SITE_CONFIG_FOLDER_PATH}/fastcgi_params /etc/nginx/fastcgi_params
@@ -97,9 +91,5 @@ echo "$(date +"%d-%b-%Y-%H-%M-%S") | Creating systemd unit file..." |& tee -a ${
 # Move the file to correct location so NGINX can be started,
 # stopped and reloaded with global commands=
 sudo mv ${SERVICE_CONFIG_FOLDER_PATH}/nginx.service /etc/systemd/system/nginx.service
-
-echo "$(date +"%d-%b-%Y-%H-%M-%S") | Removing source files..." |& tee -a ${INSTALL_LOG_FILE_PATH}
-# Remove all source files
-sudo rm -rf $SRC_FOLDER_PATH
 
 echo -e "$(date +"%d-%b-%Y-%H-%M-%S") | Configuration complete\n" |& tee -a ${INSTALL_LOG_FILE_PATH}
