@@ -1,7 +1,7 @@
 # Packer Template: Bedrock-Wordpress running on LEMP Stack
 This template installs and configures NGINX, PHP-FPM and MySQL on Ubuntu to host Wordpress as an all-in-one webserver/host. The template is currently configured to use Ubuntu 16.04 as the base image, however this can be changed to any other version available as a public AMI (Amazon EC2) or as an .iso file (VirtualBox).
 
-Wordpress is installed using [Bedrock](https://github.com/roots/bedrock), which reorganizes the Wordpress code to allow greater security and dependancy management. [Composer](https://getcomposer.org) manages the Bedrock-Wordpress installation and the Themes and Plugins installed on the site. Since Wordpress and the installed Themes and Plugins are managed by Composer, these files can be ignored by your version control product, making the size of your repository and history much smaller and easier to maintain.
+Wordpress is installed using [Bedrock](https://github.com/roots/bedrock), which reorganizes the Wordpress code to allow greater security and dependancy management. [Composer](https://getcomposer.org) manages the Wordpress installation as well as the Themes and Plugins installed on the site. Since these are managed by Composer, the files can be ignored by your version control product, making the size of your repository much smaller and your website easier to maintain.
 
 The Wordpress installation and webserver configuration are controlled entirely by the collection of user variables defined in the template file:
 
