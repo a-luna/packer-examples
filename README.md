@@ -6,6 +6,7 @@ Each directory contains one or more JSON template files which can be built by ru
 ## Install
 1. [Install Packer](https://www.packer.io/intro/getting-started/install.html)
 1. Open a new terminal and verify packer is available. Output should be similar to below:
+
 ```
 $ packer
 usage: packer [--version] [--help] <command> [<args>]
