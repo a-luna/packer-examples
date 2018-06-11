@@ -1,10 +1,10 @@
 {
   "variables": {
-    "nginx_ver": "1.13.12",
+    "nginx_ver": "1.15.0",
     "pcre_ver": "8.42",
     "zlib_ver": "1.2.11",
     "openssl_ver": "1.1.0h",
-    "geoip_ver": "20180501",
+    "geoip_ver": "20180605",
     
     "mysql_root_temp_password": "w0rdPress5q!temp1",
     "wp_db_host": "localhost",
